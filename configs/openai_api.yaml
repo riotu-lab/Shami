@@ -1,0 +1,58 @@
+# Arabic Translator Configuration
+# ================================
+# This file configures the bidirectional MSA ↔ Shami translation pipeline
+# using the OpenAI API.
+
+# OpenAI API Settings
+# -------------------
+# API key is read from the OPENAI_API_KEY environment variable
+openai_base_url: "https://api.openai.com/v1"
+openai_model: "gpt-4.1-2025-04-14"
+
+# Inference Parameters
+# --------------------
+temperature: 0          # Lower = more deterministic, higher = more creative
+max_tokens: 256           # Maximum tokens to generate per translation
+
+# Processing Settings
+# -------------------
+input_file: "data/shami_v2.csv"   # Input CSV file path
+output_dir: "outputs"           # Directory for output files
+retry_attempts: 3         # Number of retry attempts on API failure
+retry_delay: 1.0          # Delay between retries in seconds
+
+# Prompt Templates
+# ----------------
+# Use {text} as placeholder for the source text
+shami_to_msa_template: |
+  Translate from Syrian Arabic (Shami) to Modern Standard Arabic (MSA).
+
+  RULES:
+  1) Output the MSA translation ONLY. No other text.
+  2) Output Arabic ONLY. No English.
+  3) Do NOT add explanations, notes, alternatives, or examples.
+  4) Write WITHOUT diacritics/tashkeel/harakat.
+  5) Keep names, numbers, dates, URLs, and emojis unchanged.
+
+  Syrian Arabic: {text}
+  MSA Translation:
+
+msa_to_shami_template: |
+  Translate from Modern Standard Arabic (MSA) to Syrian Arabic (Shami dialect).
+
+  RULES:
+  1) Output the Shami translation ONLY. No other text.
+  2) Output Arabic ONLY. No English.
+  3) Do NOT add explanations, notes, alternatives, or examples.
+  4) Write WITHOUT diacritics/tashkeel/harakat.
+  5) Keep names, numbers, dates, URLs, and emojis unchanged.
+
+  MSA: {text}
+  Syrian Arabic Translation:
+
+# CSV Column Names
+# ----------------
+# Adjust these if your input CSV uses different column headers
+id_column: "sentID.BTEC"
+shami_column: "Shami-sent"
+msa_column: "MSA-sent"

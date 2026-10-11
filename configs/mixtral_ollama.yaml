@@ -1,0 +1,65 @@
+# Arabic Translator Configuration (Ollama Version)
+# =================================================
+
+# Ollama Settings
+model_name: "mixtral:8x22b"
+ollama_url: "http://localhost:11434/api/generate"
+
+# GPU Settings
+gpu_ids: "1"      # Comma-separated GPU IDs (e.g., "0,1,2"). Empty = use all available
+num_gpu: 4      # Layers to offload to GPU: -1 = all layers, 0 = CPU only, N = N layers
+
+# Inference Parameters
+temperature: 0
+max_tokens: 64
+top_p: 0.9
+top_k: 50
+repetition_penalty: 1.1
+
+# Processing Settings
+batch_size: 128
+input_file: "data/shami_v2.csv"
+output_dir: "outputs"
+
+# Prompt Templates
+shami_to_msa_template: |
+  You are a translation engine. Translate Modern Standard Arabic (MSA) into Syrian Arabic (Shami).
+
+  HARD CONSTRAINTS (must follow):
+  - Output ONLY the MSA translation. Nothing else.
+  - Output Arabic script ONLY. No English letters/words at all.
+  - No diacritics/harakat/tashkeel and no decorative characters (no َ ً ُ ٌ ِ ٍ ْ ّ and no ـ).
+  - Do NOT add explanations, notes, labels, alternatives, or examples.
+  - Do NOT add or remove sentences. Keep the same meaning and same content.
+  - Keep names, numbers, dates, symbols, and emojis unchanged.
+
+  STYLE:
+  - Translate meaning, not word-for-word.
+
+  Shami: {text}
+  
+
+msa_to_shami_template: |
+  You are a translation engine. Convert Syrian Arabic (Shami) to Modern Standard Arabic (MSA).
+
+  HARD CONSTRAINTS (must follow):
+  - Output ONLY the Shami translation. Nothing else.
+  - Output Arabic script ONLY. No English letters/words at all.
+  - No diacritics/harakat/tashkeel and no decorative characters (no َ ً ُ ٌ ِ ٍ ْ ّ and no ـ).
+  - Do NOT add explanations, notes, labels, alternatives, or examples.
+  - Do NOT add or remove sentences. Keep the same meaning and same content.
+  - Keep names, numbers, dates, symbols, and emojis unchanged.
+
+  STYLE:
+  - Translate meaning, not word-for-word.
+
+  MSA: {text}
+  
+
+
+# CSV Column Names
+# ----------------
+# Adjust these if your input CSV uses different column headers
+id_column: "sentID.BTEC"
+shami_column: "Shami-sent"
+msa_column: "MSA-sent"

@@ -1,0 +1,62 @@
+# Arabic Translator Configuration
+# ================================
+# This file configures the bidirectional MSA ↔ Shami translation pipeline.
+
+# Model Settings
+# --------------
+model_name: "Qwen/Qwen3-0.6B"  # HuggingFace model name or local path
+tensor_parallel_size: 1                       # Number of GPUs for tensor parallelism
+gpu_memory_utilization: 0.6                   # GPU memory fraction to use (0.0-1.0)
+dtype: "auto"                                 # Data type: "auto", "float16", "bfloat16"
+
+# Inference Parameters
+# --------------------
+temperature: 0.3          # Lower = more deterministic, higher = more creative
+max_tokens: 256           # Maximum tokens to generate per translation
+top_p: 0.9                # Nucleus sampling threshold
+top_k: 50                 # Top-k sampling limit
+repetition_penalty: 1.1   # Penalty for token repetition (1.0 = no penalty)
+
+# Processing Settings
+# -------------------
+batch_size: 8            # Number of translations per batch
+input_file: "data/shami_v2.csv"   # Input CSV file path
+output_dir: "outputs"           # Directory for output files
+
+# Prompt Templates
+# ----------------
+# Use {text} as placeholder for the source text
+shami_to_msa_template: |
+  Translate from Syrian Arabic (Shami) to Modern Standard Arabic (MSA).
+
+  RULES:
+  1) Output the MSA translation ONLY. No other text.
+  2) Output Arabic ONLY. No English.
+  3) Do NOT output any text before or after the JSON.
+  4) Do NOT add explanations, notes, alternatives, or examples.
+  5) IMPORTANT: Write WITHOUT diacritics/tashkeel/harakat (no َ ً ُ ٌ ِ ٍ ْ ّ).
+  6) Keep names, numbers, dates, URLs, and emojis unchanged.
+
+  Syrian Arabic: {text}
+  MSA Translation:
+
+msa_to_shami_template: |
+  Translate from Modern Standard Arabic (MSA) to Syrian Arabic (Shami dialect).
+
+  RULES:
+  1) Output the Shami translation ONLY. No other text.
+  2) Output Arabic ONLY. No English.
+  3) Do NOT output any text before or after the JSON.
+  4) Do NOT add explanations, notes, alternatives, or examples.
+  5) IMPORTANT: Write WITHOUT diacritics/tashkeel/harakat (no َ ً ُ ٌ ِ ٍ ْ ّ).
+  6) Keep names, numbers, dates, URLs, and emojis unchanged.
+
+  MSA: {text}
+  Syrian Arabic Translation:
+
+# CSV Column Names
+# ----------------
+# Adjust these if your input CSV uses different column headers
+id_column: "sentID.BTEC"
+shami_column: "Shami-sent"
+msa_column: "MSA-sent"

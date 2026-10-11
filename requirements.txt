@@ -1,0 +1,12 @@
+# Install a CUDA build of PyTorch first, e.g.:
+#   pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cu128
+pandas
+pyyaml
+tqdm
+requests
+openai
+nltk
+torch
+transformers
+sentencepiece
+vllm
